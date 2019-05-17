@@ -4,7 +4,7 @@ import axios from "../../axios-orders";
 export const purchaseBurgerSuccess = (id, orderData) => {
   return {
     type: actionTypes.PURCHASE_BURGER_SUCCESS,
-    actionId: id,
+    orderId: id,
     orderData: orderData
   };
 };
@@ -17,7 +17,9 @@ export const purchaseBurgerFailed = error => {
 };
 
 export const purchaseBurgerStart = () => {
-  return { type: actionTypes.PURCHASE_BURGER_START };
+  return {
+    type: actionTypes.PURCHASE_BURGER_START
+  };
 };
 
 export const purchaseBurger = orderData => {
@@ -25,13 +27,12 @@ export const purchaseBurger = orderData => {
     dispatch(purchaseBurgerStart());
     axios
       .post("/orders.json", orderData)
-      .then(res => {
-        console.log(res.data);
-        dispatch(purchaseBurgerSuccess(res.data.name, orderData));
-        // this.props.history.push("/");
+      .then(response => {
+        console.log(response.data);
+        dispatch(purchaseBurgerSuccess(response.data.name, orderData));
       })
-      .catch(err => {
-        dispatch(purchaseBurgerFailed(err));
+      .catch(error => {
+        dispatch(purchaseBurgerFailed(error));
       });
   };
 };
@@ -49,10 +50,10 @@ export const fetchOrdersSuccess = orders => {
   };
 };
 
-export const fetchOrdersFailed = err => {
+export const fetchOrdersFailed = error => {
   return {
     type: actionTypes.FETCH_ORDERS_FAILED,
-    error: err
+    error: error
   };
 };
 
